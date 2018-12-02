@@ -1,5 +1,3 @@
-package dayone
-
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -25,7 +23,7 @@ object One {
         frequencies.add(0)
 
         while (!duplicateFound) {
-            file = classLoader.getResource("dayone/one_adi.txt")!!.openStream()
+            file = classLoader.getResource("one.txt")!!.openStream()
             var lineNumber = 1
 
             BufferedReader(InputStreamReader(file)).use { br ->
