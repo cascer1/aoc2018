@@ -101,8 +101,8 @@ object Two {
             }
         }
 
-        println("lineOne = ${lineOne}")
-        println("lineTwo = ${lineTwo}")
+        println("lineOne = $lineOne")
+        println("lineTwo = $lineTwo")
 
         return getShared(lineOne, lineTwo)
     }
@@ -134,8 +134,8 @@ object Two {
 
         val finalString = StringBuilder()
 
-        (0 until string1.length).forEach{i ->
-            if(arrayOne[i] == arrayTwo[i]) {
+        (0 until string1.length).forEach { i ->
+            if (arrayOne[i] == arrayTwo[i]) {
                 finalString.append(arrayOne[i])
             }
         }
