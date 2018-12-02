@@ -5,7 +5,7 @@ object Two {
 
     @JvmStatic
     fun main(args: Array<String>) {
-        val answer = findAnswerOne()
+        val answer = findAnswerTwo()
         println()
         println("answer: \t\t\t$answer")
     }
@@ -64,5 +64,82 @@ object Two {
 
 
         return amountTwo * amountThree
+    }
+
+    private fun findAnswerTwo(): String {
+        val classLoader = javaClass.classLoader
+        val file = classLoader.getResource("two.txt")!!.openStream()
+
+        val lines = ArrayList<String>()
+
+        BufferedReader(InputStreamReader(file)).use { br ->
+            br.forEachLine { line ->
+                lines.add(line)
+            }
+        }
+
+        var lineOne = ""
+        var lineTwo = ""
+        var found = false
+
+        (0 until lines.size).forEach outer@{ i ->
+            val thisLine = lines[i]
+
+            if (found) {
+                return@outer
+            }
+
+            (i + 1 until lines.size).forEach inner@{ j ->
+                val thatLine = lines[j]
+
+                if (differsByOne(thisLine, thatLine)) {
+                    lineOne = thisLine
+                    lineTwo = thatLine
+                    found = true
+                    return@outer
+                }
+            }
+        }
+
+        println("lineOne = ${lineOne}")
+        println("lineTwo = ${lineTwo}")
+
+        return getShared(lineOne, lineTwo)
+    }
+
+    private fun differsByOne(string1: String, string2: String): Boolean {
+        if (string1.length != string2.length) {
+            return false
+        }
+
+        var mistakesAllowed = 1
+
+        val arrayOne = string1.toCharArray()
+        val arrayTwo = string2.toCharArray()
+
+        for (i in 0 until string1.length - 1) {
+            if (arrayOne[i] != arrayTwo[i]) {
+                if (--mistakesAllowed < 0) {
+                    return false
+                }
+            }
+        }
+
+        return true
+    }
+
+    private fun getShared(string1: String, string2: String): String {
+        val arrayOne = string1.toCharArray()
+        val arrayTwo = string2.toCharArray()
+
+        val finalString = StringBuilder()
+
+        (0 until string1.length).forEach{i ->
+            if(arrayOne[i] == arrayTwo[i]) {
+                finalString.append(arrayOne[i])
+            }
+        }
+
+        return finalString.toString()
     }
 }
