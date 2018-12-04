@@ -1,16 +1,15 @@
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import kotlin.reflect.jvm.internal.impl.types.checker.TypeIntersector
 
 object Four {
 
     @JvmStatic
     fun main(args: Array<String>) {
         val answerOne = findAnswerOne()
-//        val answerTwo = findAnswerTwo()
+        val answerTwo = findAnswerTwo()
         println()
         println("answer 1: \t\t\t$answerOne")
-//        println("answer 2: \t\t\t$answerTwo")
+        println("answer 2: \t\t\t$answerTwo")
     }
 
     private fun loadFile(): Array<FourEvent> {
@@ -22,67 +21,26 @@ object Four {
 
         BufferedReader(InputStreamReader(file)).use { br ->
             br.forEachLine { line ->
-                returned.add(parseLine(line))
+                returned.add(FourEvent(line))
             }
         }
 
         return returned.toTypedArray()
     }
 
-    private fun parseLine(line: String): FourEvent {
-        // [1518-04-12 00:04] Guard #1193 begins shift
-        // [1518-08-11 00:48] wakes up
-        // [1518-07-12 00:15] falls asleep
-
-        val timePattern = ".[0-9]{4}-([0-9]{2})-([0-9]{2}) [0-9]{2}:([0-9]{2}).*"
-
-        val timeRegex = Regex(timePattern)
-        val groups = timeRegex.matchEntire(line)!!.groupValues
-
-        val month = groups[1].toInt() * 10000
-        val day = groups[2].toInt() * 100
-        val minute = groups[3].toInt()
-
-        val event = FourEvent(month, day, minute, line)
-
-        event.eventType = when {
-            line.contains("Guard") -> {
-                FourEventType.START
-            }
-            line.contains("wakes") -> {
-                FourEventType.WAKE
-            }
-            line.contains("falls") -> {
-                FourEventType.SLEEP
-            }
-            else -> {
-                FourEventType.UNKNOWN
-            }
-        }
-
-        if(event.eventType == FourEventType.START) {
-            val guardStart = line.indexOf('#') + 1
-            val guardEnd = line.indexOf(" ", guardStart)
-            val guardId = line.substring(guardStart, guardEnd).toInt()
-            event.guardId = guardId
-        }
-
-        return event
-    }
-
     private fun addGuardIds(events: Array<FourEvent>) {
-        (0 until events.size).forEach{i ->
+        (0 until events.size).forEach { i ->
             val currentEvent = events[i]
 
-            if(currentEvent.guardId == 0) {
+            if (currentEvent.guardId == 0) {
                 currentEvent.guardId = findCurrentGuard(events, i)
             }
         }
     }
 
     private fun findCurrentGuard(events: Array<FourEvent>, index: Int): Int {
-        (index downTo 0).forEach{i ->
-            if(events[i].eventType == FourEventType.START && events[i].guardId != 0) {
+        (index downTo 0).forEach { i ->
+            if (events[i].eventType == FourEventType.START && events[i].guardId != 0) {
                 return events[i].guardId
             }
         }
@@ -90,11 +48,115 @@ object Four {
         return 0
     }
 
+    private fun countGuardMinutes(guardMinutes: HashMap<Int, Array<Int>>, events: Array<FourEvent>) {
+        var sleepStart = 0
+        events.forEach { event ->
+            if (event.eventType == FourEventType.SLEEP) {
+                sleepStart = event.minute
+
+                if (!guardMinutes.containsKey(event.guardId)) {
+                    guardMinutes[event.guardId] = Array(60) { 0 }
+                }
+            }
+
+            if (event.eventType == FourEventType.WAKE) {
+                (sleepStart until event.minute).forEach {
+                    guardMinutes[event.guardId]!![it]++
+                }
+            }
+        }
+    }
+
+    private fun getGuardWithMostMinutes(guardMinutes: HashMap<Int, Array<Int>>): Int {
+        var highest = 0
+        var highestGuard = 0
+
+        guardMinutes.forEach { guardId, minutes ->
+
+            var totalMinutes = 0
+
+            minutes.forEach { minute ->
+                totalMinutes += minute
+            }
+
+            if (totalMinutes > highest) {
+                highest = totalMinutes
+                highestGuard = guardId
+            }
+        }
+
+        return highestGuard
+    }
+
+    private fun getMostMinutesForGuard(guardMinutes: HashMap<Int, Array<Int>>, guardId: Int): Int {
+        var highest = 0
+        var highestMinute = 0
+
+        val minutes = guardMinutes.get(guardId)!!
+
+        (0 until minutes.size).forEach { i ->
+            if (minutes[i] > highest) {
+                highest = minutes[i]
+                highestMinute = i
+            }
+        }
+
+        return highestMinute
+    }
+
+    private fun getHighestGuardMinute(guardMInutes: HashMap<Int, Array<Int>>): Array<Int> {
+
+        var highest = 0
+
+        val returned = Array(2) { 0 } // 0 = guard, 1 = minute
+
+        guardMInutes.forEach { guardId, minutes ->
+            var currentHighest = 0
+            var currentHighestMinute = 0
+
+            (0 until minutes.size).forEach { i ->
+                if (minutes[i] > currentHighest) {
+                    currentHighest = minutes[i]
+                    currentHighestMinute = i
+                }
+            }
+
+            if (currentHighest > highest) {
+                highest = currentHighest
+                returned[0] = guardId
+                returned[1] = currentHighestMinute
+            }
+        }
+
+        return returned
+    }
+
     private fun findAnswerOne(): Int {
         val events = loadFile()
         events.sortBy { it.date }
         addGuardIds(events)
 
-        return 0
+        val guardMinutes = HashMap<Int, Array<Int>>()
+
+        countGuardMinutes(guardMinutes, events)
+
+        val highestGuard = getGuardWithMostMinutes(guardMinutes)
+        val highestMinute = getMostMinutesForGuard(guardMinutes, highestGuard)
+
+        return highestGuard * highestMinute
+    }
+
+    private fun findAnswerTwo(): Int {
+        val events = loadFile()
+        events.sortBy { it.date }
+        addGuardIds(events)
+
+        val guardMinutes = HashMap<Int, Array<Int>>()
+
+        countGuardMinutes(guardMinutes, events)
+
+        val highest = getHighestGuardMinute(guardMinutes)
+
+        return highest[0] * highest[1]
     }
 }
