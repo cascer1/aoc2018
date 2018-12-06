@@ -100,7 +100,7 @@ object Six {
         val validPoints = points.filter { !it.disqualified }.sortedBy { it.area }
 
         validPoints.forEach { point ->
-            println("[${point.x}, ${point.y}] (${point.letter}) has area of ${point.area}")
+            println("[${point.x}, ${point.y}] (${point.letter}) has totalDistance of ${point.area}")
         }
 
         return validPoints.last().area
@@ -108,6 +108,28 @@ object Six {
 
     private fun findAnswerTwo(): Int {
 
-        return 0
+        val points = loadFile()
+
+        var validDotCount = 0
+
+        (SixPoint.minY..SixPoint.maxY).forEach { y ->
+            println()
+            (SixPoint.minX..SixPoint.maxX).forEach { x ->
+                var totalDistance = 0
+
+                points.forEach { point ->
+                    totalDistance += calculateDistance(point, x, y)
+                }
+
+                if (totalDistance < 10000) {
+                    print("#")
+                    validDotCount++
+                } else {
+                    print(".")
+                }
+            }
+        }
+        println()
+        return validDotCount
     }
 }
