@@ -1,3 +1,5 @@
+package four
+
 class FourEvent(var event: String) {
     var guardId: Int = 0
         set(value) {
