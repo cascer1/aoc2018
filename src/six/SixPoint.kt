@@ -1,11 +1,7 @@
 package six
 
-class SixPoint(x: Int, y: Int, area: Int = 0, disqualified: Boolean = false) {
+class SixPoint(val x: Int, val y: Int, var area: Int = 0, var disqualified: Boolean = false) {
 
-    val x = x
-    val y = y
-    var area = area
-    var disqualified = disqualified
     var letter = 'a'
 
     init {
@@ -32,3 +28,4 @@ class SixPoint(x: Int, y: Int, area: Int = 0, disqualified: Boolean = false) {
         var nextLetter = 65.toChar()
     }
 }
+
