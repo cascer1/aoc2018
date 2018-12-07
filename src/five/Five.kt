@@ -1,5 +1,6 @@
 package five
 
+import utils.FileUtils
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
@@ -12,15 +13,6 @@ object Five {
 
         val answerTwo = findAnswerTwo()
         println("answer 2: \t\t\t$answerTwo")
-    }
-
-    private fun loadFile(): String {
-        val classLoader = javaClass.classLoader
-        val file = classLoader.getResource("five.txt")!!.openStream()
-
-        BufferedReader(InputStreamReader(file)).use { br ->
-            return br.readLine()
-        }
     }
 
     private fun destroyFirstPair(input: String): String {
@@ -61,7 +53,7 @@ object Five {
 
 
     private fun findAnswerOne(): Int {
-        val input = loadFile()
+        val input = FileUtils.loadFileAsString("five.txt")
 
         val polymer = removeDuplicates(input)
 
@@ -69,7 +61,7 @@ object Five {
     }
 
     private fun findAnswerTwo(): Int {
-        val input = loadFile()
+        val input = FileUtils.loadFileAsString("five.txt")
         val alphabet = "abcdefghijklmnopqrstuvwxyz"
 
         var shortest = input.length
