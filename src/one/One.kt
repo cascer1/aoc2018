@@ -25,7 +25,7 @@ object One {
         frequencies.add(0)
 
         while (!duplicateFound) {
-            file = classLoader.getResource("one.txt")!!.openStream()
+            file = classLoader.getResource("01.txt")!!.openStream()
             var lineNumber = 1
 
             BufferedReader(InputStreamReader(file)).use { br ->

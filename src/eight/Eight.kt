@@ -20,7 +20,7 @@ object Eight {
 
 
     private fun parseFile() {
-        val input = FileUtils.loadFileAsString("eight.txt")
+        val input = FileUtils.loadFileAsString("08.txt")
 
         numbers.clear()
         index = 0

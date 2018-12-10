@@ -19,7 +19,7 @@ object Seven {
 
 
     private fun parseFile() {
-        val reader = FileUtils.loadFileAsBufferedReader("seven.txt")
+        val reader = FileUtils.loadFileAsBufferedReader("07.txt")
 
         steps.clear()
         elves.clear()

@@ -16,7 +16,7 @@ object Four {
 
     private fun loadFile(): Array<FourEvent> {
         val classLoader = javaClass.classLoader
-        val file = classLoader.getResource("four.txt")!!.openStream()
+        val file = classLoader.getResource("04.txt")!!.openStream()
 
         val returned: List<FourEvent>
         returned = ArrayList()

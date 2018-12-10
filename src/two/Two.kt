@@ -14,7 +14,7 @@ object Two {
 
     private fun findAnswerOne(): Int {
         val classLoader = javaClass.classLoader
-        val file = classLoader.getResource("two.txt")!!.openStream()
+        val file = classLoader.getResource("02.txt")!!.openStream()
 
         var amountTwo = 0 // Amount of IDs that contain two of the same letter
         var amountThree = 0 // Amount of IDs that contain three of the same letter
@@ -70,7 +70,7 @@ object Two {
 
     private fun findAnswerTwo(): String {
         val classLoader = javaClass.classLoader
-        val file = classLoader.getResource("two.txt")!!.openStream()
+        val file = classLoader.getResource("02.txt")!!.openStream()
 
         val lines = ArrayList<String>()
 

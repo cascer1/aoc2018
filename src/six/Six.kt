@@ -17,7 +17,7 @@ object Six {
 
     private fun loadFile(): ArrayList<SixPoint> {
         val classLoader = javaClass.classLoader
-        val file = classLoader.getResource("six.txt")!!.openStream()
+        val file = classLoader.getResource("06.txt")!!.openStream()
 
         val returned = ArrayList<SixPoint>()
 

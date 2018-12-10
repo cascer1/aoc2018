@@ -1,8 +1,6 @@
 package five
 
 import utils.FileUtils
-import java.io.BufferedReader
-import java.io.InputStreamReader
 
 object Five {
 
@@ -53,7 +51,7 @@ object Five {
 
 
     private fun findAnswerOne(): Int {
-        val input = FileUtils.loadFileAsString("five.txt")
+        val input = FileUtils.loadFileAsString("05.txt")
 
         val polymer = removeDuplicates(input)
 
@@ -61,7 +59,7 @@ object Five {
     }
 
     private fun findAnswerTwo(): Int {
-        val input = FileUtils.loadFileAsString("five.txt")
+        val input = FileUtils.loadFileAsString("05.txt")
         val alphabet = "abcdefghijklmnopqrstuvwxyz"
 
         var shortest = input.length

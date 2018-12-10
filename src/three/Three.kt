@@ -37,7 +37,7 @@ object Three {
 
     private fun loadFile(): ArrayList<ThreeRectangle> {
         val classLoader = javaClass.classLoader
-        val file = classLoader.getResource("three_adi.txt")!!.openStream()
+        val file = classLoader.getResource("03.txt")!!.openStream()
 
         val returned = ArrayList<ThreeRectangle>()
 
